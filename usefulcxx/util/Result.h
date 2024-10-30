@@ -13,22 +13,28 @@ private:
   T item_;
   E error_;
   bool ok_;
+#if defined(USEFULCXX_ALLOW_EXCEPTIONS)
+  static constexpr bool allow_exceptions = true;
+#else
+  static constexpr bool allow_exceptions = false;
+#endif
 public:
-  Result() : ok_(false) {
+  constexpr Result() noexcept
+    : ok_(false) {
   }
 
-  Result(T item)
+  constexpr Result(T item) noexcept
     : item_(std::move(item))
     , ok_(true) {
   }
 
   // Check if there is a result item to access
-  bool Ok() {
+  bool Ok() noexcept {
     return ok_;
   }
 
   // Access the underlying result item
-  T& operator*() {
+  T& operator*() noexcept(!allow_exceptions) {
     if (ok_) {
       return item_;
     }
@@ -39,7 +45,7 @@ public:
   }
 
   // Access a pointer to the underlying result item
-  T* operator->() {
+  T* operator->() noexcept(!allow_exceptions) {
     if (ok_) {
       return &item_;
     }
@@ -50,7 +56,7 @@ public:
   }
 
   // Access the error
-  E& Error() {
+  E& Error() noexcept(!allow_exceptions) {
     if (!ok_) {
       return error_;
     }
@@ -61,7 +67,7 @@ public:
   }
 
   // Factory returning a Result with the error set
-  static Result<T,E> Error(E error) {
+  static Result<T,E> Error(E error) noexcept {
     auto r = Result<T,E>{};
     r.error_ = std::move(error);
     return r;
