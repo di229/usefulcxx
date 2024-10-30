@@ -7,6 +7,7 @@ include_directories(${CMAKE_SOURCE_DIR})
 set(CMAKE_BUILD_TYPE DEBUG)
 
 set(BIN_DIR ${CMAKE_SOURCE_DIR}/bin)
+set(BIN_DIR ${CMAKE_SOURCE_DIR}/lib)
 set(WARNING_FLAGS " -Wall -Wextra -pedantic")
 set(CXX_STD_FLAG " -std=c++17")
 
