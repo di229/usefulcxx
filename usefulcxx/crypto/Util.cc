@@ -2,8 +2,7 @@
 
 #include <fstream>
 
-OptString ReadFile(std::string_view& path)
-{  
+OptString ReadFile(std::string_view& path) {
   if (std::ifstream is{path, std::ios::binary | std::ios::ate}) {
     auto pos = is.tellg();
     std::string str(std::streamoff(pos), 0);
@@ -18,16 +17,15 @@ OptString ReadFile(std::string_view& path)
   return {};
 }
 
-int TrimTrailing(std::string& s)
-{
+int TrimTrailing(std::string& s) {
   int res = s.length();
-  for (auto it = s.crbegin(); it != s.crend(); it++)
-  {
-    if (!std::isspace(*it)) 
-    {
+
+  for (auto it = s.crbegin(); it != s.crend(); it++) {
+    if (!std::isspace(*it)) {
       break;
     }
     res--;
   }
+
   return res;
 }

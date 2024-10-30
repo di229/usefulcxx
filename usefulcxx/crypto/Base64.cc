@@ -3,10 +3,9 @@
 #include <openssl/evp.h>
 #include <cstring>
 
-OptBytes DecodeBase64String(std::string& str)
-{
-  if (auto ctx = EVP_ENCODE_CTX_new()) 
-  {
+OptBytes DecodeBase64String(std::string& str) {
+
+  if (auto ctx = EVP_ENCODE_CTX_new()) {
     EVP_DecodeInit(ctx);
     unsigned char *inp = reinterpret_cast<unsigned char*>(&str[0]);
     auto inlen = TrimTrailing(str);
@@ -16,8 +15,7 @@ OptBytes DecodeBase64String(std::string& str)
 
     auto rc = EVP_DecodeUpdate(ctx, outp, &outlen, inp, inlen);
 
-    if (rc != -1) 
-    {
+    if (rc != -1) {
       int tmp;
       rc = EVP_DecodeFinal(ctx, outp + outlen, &tmp);
       outlen += tmp;
@@ -27,8 +25,7 @@ OptBytes DecodeBase64String(std::string& str)
 
     EVP_ENCODE_CTX_free(ctx);
 
-    if (rc == 1)
-    {
+    if (rc == 1) {
       return res;
     }
 
@@ -37,11 +34,11 @@ OptBytes DecodeBase64String(std::string& str)
   return {};
 }
 
-OptBytes DecodeBase64File(std::string_view path)
-{
-  if (auto str = ReadFile(path))
-  {
+OptBytes DecodeBase64File(std::string_view path) {
+
+  if (auto str = ReadFile(path)) {
     return DecodeBase64String(*str);
   }
+
   return {};
 }
